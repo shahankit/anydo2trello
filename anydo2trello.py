@@ -6,7 +6,7 @@ ANYDO_API = HOME + "python-anydo/"
 
 sys.path.append(ANYDO_API)
 
-from anydo.api import AnyDoAP
+from anydo.api import AnyDoAPI
 
 del sys.path[-1]
 
