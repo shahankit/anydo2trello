@@ -18,11 +18,8 @@ class CreateOnTrello(object):
 	and comment.
 	"""
 	def __init__(self, api_key, application_name, token_expires='1day'):
-		"""
-
-		"""
 		super(CreateOnTrello, self).__init__()
-		self.api_key
+		self.api_key = api_key
 		auth = Authorise(api_key)
 		authURL = auth.get_authorisation_url(application_name, token_expires)
 	
@@ -30,6 +27,21 @@ class CreateOnTrello(object):
 		self.trello_client = Client(self.api_key, user_auth_token)
 		self.member = Member(self.trello_client, 'me')
 		self.member.get_boards()
+
+	def get_open_boards(self):
+		if not hasattr(self, 'boards'):
+			boards = self.member.get_boards()
+			open_list = []
+			for board in boards:
+				info = board.get_board_information({'fields':'closed'})
+				if not info['closed']:
+					open_list.append(board)
+			print ('-----------------here-------------------')
+			self.boards = open_list
+		return self.boards
+
+	def create_board(self, board_name):
+		open_boards = self.get_open_boards()
 
 if __name__ == '__main__':
 	
@@ -40,15 +52,15 @@ if __name__ == '__main__':
 	try:
 		option = sys.argv[1]
 		api_key = sys.argv[2]
-		application_name = sys.argv[3]
-
-		if len(sys.argv) >= 5:
-			token_expires = sys.argv[4]
-		else:
-			token_expires = '1day'
 
 	except:
 		pass
 
 	if option == '-a':
-		c = CreateOnTrello(api_key, application_name, token_expires)
+		c = CreateOnTrello(api_key, 'anydo2trello', 'never')
+		user_auth_token = raw_input('Enter the generated authorization token here : ')
+		c.create_user(user_auth_token)
+		c.create_board('testing board')
+		boards = self.get_open_boards()
+		for board in boards:
+			print (board.name)
