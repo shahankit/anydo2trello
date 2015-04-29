@@ -36,12 +36,15 @@ class CreateOnTrello(object):
 				info = board.get_board_information({'fields':'closed'})
 				if not info['closed']:
 					open_list.append(board)
-			print ('-----------------here-------------------')
 			self.boards = open_list
 		return self.boards
 
 	def create_board(self, board_name):
 		open_boards = self.get_open_boards()
+		for board in open_boards:
+			if board.name == board_name:
+				return board
+
 
 if __name__ == '__main__':
 	
