@@ -59,6 +59,13 @@ class CreateOnTrello(object):
 		)
 		return self.trello_client.create_board(boards_json)
 
+	def create_list(self, list_name, board):
+		lists_list = board.get_lists()
+		for board_list in lists_list:
+			if board_list.name == list_name:
+				return board_list
+		return board.create_list({'name':list_name})
+
 if __name__ == '__main__':
 	
 	import sys
