@@ -10,6 +10,7 @@ from trolly.list import List
 from trolly.board import Board
 from trolly.card import Card
 from trolly.authorise import Authorise
+from trolly.trelloobject import TrelloObject
 
 class CreateOnTrello(object):
 	"""
@@ -25,12 +26,12 @@ class CreateOnTrello(object):
 	
 	def create_user(self, user_auth_token):
 		self.trello_client = Client(self.api_key, user_auth_token)
-		self.member = Member(self.trello_client, 'me')
-		self.member.get_boards()
+		member = Member(self.trello_client, 'me')
+		self.get_open_boards(member)
 
-	def get_open_boards(self):
+	def get_open_boards(self, member):
 		if not hasattr(self, 'boards'):
-			boards = self.member.get_boards()
+			boards = member.get_boards()
 			open_list = []
 			for board in boards:
 				info = board.get_board_information({'fields':'closed'})
@@ -40,11 +41,23 @@ class CreateOnTrello(object):
 		return self.boards
 
 	def create_board(self, board_name):
-		open_boards = self.get_open_boards()
+		"""
+		Creates a new board with name board_name. If an open board with 
+		same name already exists it returns a board object of existing 
+		board else creates a new board and returns a board object for 
+		new board.
+		"""
+		open_boards = self.get_open_boards(Member(self.trello_client, 'me'))
 		for board in open_boards:
 			if board.name == board_name:
 				return board
 
+		boards_json = self.trello_client.fetch_json(
+			uri_path='/boards', 
+			http_method='POST', 
+			query_params={'name':board_name}
+		)
+		return self.trello_client.create_board(boards_json)
 
 if __name__ == '__main__':
 	
@@ -63,7 +76,3 @@ if __name__ == '__main__':
 		c = CreateOnTrello(api_key, 'anydo2trello', 'never')
 		user_auth_token = raw_input('Enter the generated authorization token here : ')
 		c.create_user(user_auth_token)
-		c.create_board('testing board')
-		boards = c.get_open_boards()
-		for board in boards:
-			print (board.name)
