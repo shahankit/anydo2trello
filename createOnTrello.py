@@ -61,6 +61,6 @@ if __name__ == '__main__':
 		user_auth_token = raw_input('Enter the generated authorization token here : ')
 		c.create_user(user_auth_token)
 		c.create_board('testing board')
-		boards = self.get_open_boards()
+		boards = c.get_open_boards()
 		for board in boards:
 			print (board.name)
