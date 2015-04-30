@@ -78,23 +78,3 @@ class CreateOnTrello(object):
 
 	def create_card(self, card_title, trello_list, desc=None):
 		trello_list.add_card({'name':card_title, 'desc':desc, 'date':None})
-
-if __name__ == '__main__':
-	
-	import sys
-
-	option = ''
-
-	try:
-		option = sys.argv[1]
-		api_key = sys.argv[2]
-	except:
-		pass
-
-	if option == '-a':
-		c = CreateOnTrello(api_key, 'anydo2trello', 'never')
-		user_auth_token = raw_input('Enter the generated authorization token here : ')
-		c.create_user(user_auth_token)
-		board = c.create_board('Welcome Board')
-		trello_list = c.create_list('test', board)
-		c.create_card('Great spartans', trello_list, 'This is description of spartans who fought bravely with leonoidas.')
