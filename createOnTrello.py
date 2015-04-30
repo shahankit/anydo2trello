@@ -6,9 +6,6 @@ Created on 25 Apr 2015
 
 from trolly.client import Client
 from trolly.member import Member
-from trolly.list import List
-from trolly.board import Board
-from trolly.card import Card
 from trolly.authorise import Authorise
 from trolly.trelloobject import TrelloObject
 
@@ -18,18 +15,31 @@ class CreateOnTrello(object):
 	to get authorisation url for user and create board, list, card 
 	and comment.
 	"""
-	def __init__(self, api_key, application_name, token_expires='1day'):
+	def __init__(self, api_key, application_name, token_expires='1day', auth_token=None):
 		super(CreateOnTrello, self).__init__()
-		self.api_key = api_key
-		auth = Authorise(api_key)
-		authURL = auth.get_authorisation_url(application_name, token_expires)
+		if (auth_token is None):
+			self.api_key = api_key
+			auth = Authorise(api_key)
+			auth.get_authorisation_url(application_name, token_expires)
+			return 'unauthorized'
+		else
+			self.api_key = api_key
+			self.create_user(auth_token)
+			return 'authorized'
 	
 	def create_user(self, user_auth_token):
+		"""
+		Initiates trello client for the user and also stores list of
+		open boards for the user and stores locally as instance variable.
+		"""
 		self.trello_client = Client(self.api_key, user_auth_token)
 		member = Member(self.trello_client, 'me')
 		self.get_open_boards(member)
 
 	def get_open_boards(self, member):
+		"""
+		Get all the open baords for the user.
+		"""
 		if not hasattr(self, 'boards'):
 			boards = member.get_boards()
 			open_list = []
@@ -66,6 +76,9 @@ class CreateOnTrello(object):
 				return board_list
 		return board.create_list({'name':list_name})
 
+	def create_card(self, card_title, trello_list, desc=None):
+		trello_list.add_card({'name':card_title, 'desc':desc, 'date':None})
+
 if __name__ == '__main__':
 	
 	import sys
@@ -75,7 +88,6 @@ if __name__ == '__main__':
 	try:
 		option = sys.argv[1]
 		api_key = sys.argv[2]
-
 	except:
 		pass
 
@@ -83,3 +95,6 @@ if __name__ == '__main__':
 		c = CreateOnTrello(api_key, 'anydo2trello', 'never')
 		user_auth_token = raw_input('Enter the generated authorization token here : ')
 		c.create_user(user_auth_token)
+		board = c.create_board('Welcome Board')
+		trello_list = c.create_list('test', board)
+		c.create_card('Great spartans', trello_list, 'This is description of spartans who fought bravely with leonoidas.')
