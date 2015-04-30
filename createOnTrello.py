@@ -16,16 +16,18 @@ class CreateOnTrello(object):
 	and comment.
 	"""
 	def __init__(self, api_key, application_name, token_expires='1day', auth_token=None):
+		"""
+		If the auth_token is NoneType then generates a url to fetch 
+		token, otherwise creates user client.
+		"""
 		super(CreateOnTrello, self).__init__()
 		if (auth_token is None):
 			self.api_key = api_key
 			auth = Authorise(api_key)
 			auth.get_authorisation_url(application_name, token_expires)
-			return 'unauthorized'
 		else
 			self.api_key = api_key
 			self.create_user(auth_token)
-			return 'authorized'
 	
 	def create_user(self, user_auth_token):
 		"""
