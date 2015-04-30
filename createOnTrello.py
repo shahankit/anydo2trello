@@ -70,6 +70,11 @@ class CreateOnTrello(object):
 		return self.trello_client.create_board(boards_json)
 
 	def create_list(self, list_name, board):
+		"""
+		Creates a new list for the board object in parameters. If a list 
+		with similar name already exists returns the existing list, 
+		otherwise returns a newly created list.
+		"""
 		lists_list = board.get_lists()
 		for board_list in lists_list:
 			if board_list.name == list_name:
@@ -77,4 +82,7 @@ class CreateOnTrello(object):
 		return board.create_list({'name':list_name})
 
 	def create_card(self, card_title, trello_list, desc=None):
+		"""
+		Create a new card for given trello_list in parameters.
+		"""
 		trello_list.add_card({'name':card_title, 'desc':desc, 'date':None})
