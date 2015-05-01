@@ -12,7 +12,8 @@ from trolly.trelloobject import TrelloObject
 class CreateOnTrello(object):
 	"""
 	This class contains all the methods which uses the trello API
-	to get authorisation url for user and create board, list, card.
+	to get authorisation url for user and create board, list, card, 
+	checklists.
 	"""
 	def __init__(self, api_key, application_name, token_expires='1day', auth_token=None):
 		super(CreateOnTrello, self).__init__()
@@ -53,8 +54,8 @@ class CreateOnTrello(object):
 		"""
 		Creates a new board with name board_name. If an open board with 
 		same name already exists it returns a board object of existing 
-		board else creates a new board and returns a board object for 
-		new board.
+		trello_board else creates a new board and returns a trello_board 
+		object for new board.
 		"""
 		open_boards = self.get_open_boards(Member(self.trello_client, 'me'))
 		for board in open_boards:
@@ -62,17 +63,17 @@ class CreateOnTrello(object):
 				return board
 
 		boards_json = self.trello_client.fetch_json(
-			uri_path='/boards', 
-			http_method='POST', 
+			uri_path='/boards',
+			http_method='POST',
 			query_params={'name':board_name}
 		)
 		return self.trello_client.create_board(boards_json)
 
-	def create_list(self, list_name, board):
+	def create_list(self, list_name, trello_board):
 		"""
-		Creates a new list for the board object in parameters. If a list 
-		with similar name already exists returns the existing list, 
-		otherwise returns a newly created list.
+		Creates a new list for the trello_board object in parameters. 
+		If a list with similar name already exists returns the existing 
+		trello_list, otherwise returns a newly created trello_list.
 		"""
 		lists_list = board.get_lists()
 		for board_list in lists_list:
@@ -82,6 +83,20 @@ class CreateOnTrello(object):
 
 	def create_card(self, card_title, trello_list, desc=None):
 		"""
-		Create a new card for given trello_list in parameters.
+		Create a new card for given trello_list in parameters and returns
+		a new trello_card object.
 		"""
-		trello_list.add_card({'name':card_title, 'desc':desc, 'date':None})
+		return trello_list.add_card({'name':card_title, 'desc':desc, 'date':None})
+
+	def create_checklist(self, trello_card, checklist_title=None):
+		"""
+		Adds a checklist to trello_card in parameters. Returns a new 
+		trello_checklist object.
+		"""
+		trello_card.add_checklists({'name':checklist_title, 'value':None})
+	
+	def create_checkitem(self, trello_checklist, checkitem_name, checked=False):
+		"""
+		Adds a new checkitem to trello_checklist in parameters.
+		"""
+		trello_checklist.add_item({'name':checkitem_name, 'checked':checked})
