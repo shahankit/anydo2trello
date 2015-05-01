@@ -12,8 +12,7 @@ from trolly.trelloobject import TrelloObject
 class CreateOnTrello(object):
 	"""
 	This class contains all the methods which uses the trello API
-	to get authorisation url for user and create board, list, card 
-	and comment.
+	to get authorisation url for user and create board, list, card.
 	"""
 	def __init__(self, api_key, application_name, token_expires='1day', auth_token=None):
 		super(CreateOnTrello, self).__init__()
