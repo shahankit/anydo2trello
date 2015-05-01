@@ -18,3 +18,5 @@ for category in categories:
     category_data[category['id']] = {'name':category['name'], 'tasks':[]}
 
 tasks = api.get_all_tasks()
+for task in tasks:
+	category_data[task['categoryId']]['tasks'].append({'title':task['title'], 'status':task['status'], 'subtasks':task['subTasks'], 'note':task.get('note', '')})
