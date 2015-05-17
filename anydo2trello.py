@@ -37,3 +37,5 @@ for key in task_dict:
 	for sub_task in task_dict[key]['subTasks']:
 		task['sub_tasks'].append({'title':sub_task['title'], 'status':sub_task['status']})
 	category_data[task_dict[key]['categoryId']]['tasks'].append(task)
+
+print(category_data)
