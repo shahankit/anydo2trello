@@ -58,17 +58,12 @@ class CreateOnTrello(object):
 		trello_board else creates a new board and returns a trello_board 
 		object for new board.
 		"""
-		open_boards = self.get_open_boards(Member(self.trello_client, 'me'))
+		member = Member(self.trello_client, 'me')
+		open_boards = self.get_open_boards(member)
 		for board in open_boards:
 			if board.name == board_name:
 				return board
-
-		boards_json = self.trello_client.fetch_json(
-			uri_path='/boards',
-			http_method='POST',
-			query_params={'name':board_name}
-		)
-		return self.trello_client.create_board(boards_json)
+		return member.create_new_board({'name':board_name})
 
 	def create_list(self, list_name, trello_board):
 		"""
