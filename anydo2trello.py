@@ -6,10 +6,10 @@ Created on 5 May 2015
 import sys
 from anydo.api import AnyDoAPI
 
-anydo_username = raw_input('Enter username for any.do : ')
-anydo_password = raw_input('Enter password for any.do : ')
+# anydo_username = raw_input('Enter username for any.do : ')
+# anydo_password = raw_input('Enter password for any.do : ')
 
-api = AnyDoAPI(username = anydo_username, password = anydo_password)
+api = AnyDoAPI(username = 'shahankit2313@gmail.com', password = '1894226152')
 
 try:
 	api.get_user_info()
@@ -19,25 +19,21 @@ except:
 
 categories = api.get_all_categories()
 category_data = {}
-category_ids = {}
 for category in categories:
     category_data[category['id']] = {'name':category['name'], 'tasks':[]}
-    category_ids[category['id']] = []
 
 tasks = api.get_all_tasks()
+task_dict = {}
 for task in tasks:
-	category_ids[task['categoryId']].append(task['id'])
+	task_dict[task['id']] = task
 
-for key in category_ids:
-	print ('In category :'+category_data[key]['name'])
-	for task_id in category_ids[key]:
-		category_ids[key].remove(task_id)
-		task = api.get_task_by_id(task_id)
-		print ('\tScanning task : '+task['title'])
-		category_data[key]['tasks'].append(task)
-		for sub_task in task['subTasks']:
-			category_data[key].pop(sub_task['id'], None)
-			try:
-				category_ids[key].remove(sub_task['id'])
-			except ValueError:
-				pass
+for task in tasks:
+	if task.get('parentGlobalTaskId'):
+		task_dict.pop(task['id'])
+		task_dict[task['parentGlobalTaskId']]['subTasks'].append(task)
+
+for key in task_dict:
+	task = {'title':task_dict[key]['title'], 'sub_tasks':[], 'status':task_dict[key]['status'], 'desc':task_dict[key].get('note','')}
+	for sub_task in task_dict[key]['subTasks']:
+		task['sub_tasks'].append({'title':sub_task['title'], 'status':sub_task['status']})
+	category_data[task_dict[key]['categoryId']]['tasks'].append(task)
