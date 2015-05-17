@@ -21,12 +21,11 @@ class CreateOnTrello(object):
 		token, otherwise creates user client.
 		"""
 		super(CreateOnTrello, self).__init__()
+		self.api_key = api_key
 		if (auth_token is None):
-			self.api_key = api_key
 			auth = Authorise(api_key)
 			auth.get_authorisation_url(application_name, token_expires)
-		else
-			self.api_key = api_key
+		else:
 			self.create_user(auth_token)
 	
 	def create_user(self, user_auth_token):
