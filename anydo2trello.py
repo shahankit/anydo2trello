@@ -6,10 +6,10 @@ Created on 5 May 2015
 import sys
 from anydo.api import AnyDoAPI
 
-# anydo_username = raw_input('Enter username for any.do : ')
-# anydo_password = raw_input('Enter password for any.do : ')
+anydo_username = raw_input('Enter username for any.do : ')
+anydo_password = raw_input('Enter password for any.do : ')
 
-api = AnyDoAPI(username = 'shahankit2313@gmail.com', password = '1894226152')
+api = AnyDoAPI(username = anydo_username, password = anydo_password)
 
 try:
 	api.get_user_info()
