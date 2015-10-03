@@ -3,15 +3,15 @@ This script imports your tasks from [any.do](https://www.any.do) and converts th
 
 This script does the following to convert any.do data to trello
 
-**AnyDo**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**Trello**
-
-Categories&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;->&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Boards
-
-Tasks&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;->&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cards
-
-Notes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;->&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Description
-
-Sub tasks&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;->&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Checklist
+|**AnyDo**|**Trello**|
+|---|---|
+|Categories|Boards|
+|---|---|
+|Tasks|Cards
+|---|---|
+|Notes|Description|
+|---|---|
+|Sub tasks|Checklist|
 
 By default all the **unchecked** tasks are added to **To Do** list of a board and **checked** tasks are added to **Done** list of a board. Feel free to change them as you wish to from the script.
 
