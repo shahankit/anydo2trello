@@ -39,13 +39,7 @@ for key in task_dict:
 		task['sub_tasks'].append({'title':sub_task['title'], 'status':sub_task['status']})
 	category_data[task_dict[key]['categoryId']]['tasks'].append(task)
 
-f = open('anydo2trello.userinfo', 'ab+')
-f.seek(0)
-api_key = f.readline().strip()
-if api_key == '':
-	api_key = raw_input('Get a new api key from here: https://trello.com/1/appKey/generate and paste only api key here: ')
-	f.write(api_key + '\n')
-f.close()
+api_key = '4d9fc7d42300c24218a2eafabd76f5f8'
 
 client = CreateOnTrello(api_key = api_key, application_name = 'anydo2trello', token_expires = '1day')
 auth_token = raw_input('Enter you auth token here: ')
