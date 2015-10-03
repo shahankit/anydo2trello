@@ -5,6 +5,7 @@ Created on 5 May 2015
 """
 import sys
 from anydo.api import AnyDoAPI
+from CreateOnTrello import CreateOnTrello
 
 anydo_username = raw_input('Enter username for any.do : ')
 anydo_password = raw_input('Enter password for any.do : ')
@@ -29,7 +30,7 @@ for task in tasks:
 
 for task in tasks:
 	if task.get('parentGlobalTaskId'):
-		task_dict.pop(task['id'])
+		poped_task = task_dict.pop(task['id'])
 		task_dict[task['parentGlobalTaskId']]['subTasks'].append(task)
 
 for key in task_dict:
@@ -38,7 +39,35 @@ for key in task_dict:
 		task['sub_tasks'].append({'title':sub_task['title'], 'status':sub_task['status']})
 	category_data[task_dict[key]['categoryId']]['tasks'].append(task)
 
-f = open('anydo2trello.userinfo', 'a')
+f = open('anydo2trello.userinfo', 'ab+')
+f.seek(0)
 api_key = f.readline().strip()
 if api_key == '':
 	api_key = raw_input('Get a new api key from here: https://trello.com/1/appKey/generate and paste only api key here: ')
+	f.write(api_key + '\n')
+f.close()
+
+client = CreateOnTrello(api_key = api_key, application_name = 'anydo2trello', token_expires = '1day')
+auth_token = raw_input('Enter you auth token here: ')
+client = CreateOnTrello(api_key = api_key, application_name = 'anydo2trello', token_expires = '1day', auth_token = auth_token)
+
+for category in category_data:
+	print category_data[category]['name']
+	board = client.create_board(category_data[category]['name'])
+	completed_list = client.create_list('Done', board)		#Move checked cards to Done list
+	incomplete_list = client.create_list('To Do', board)	#Mode unchecked cards to To Do list
+	category_tasks = category_data[category]['tasks']
+	for task in category_tasks:
+		print '\t'+task['title']
+		if task['status'] == 'CHECKED':
+			card = client.create_card(task['title'], completed_list, task['desc'])
+		else:
+			card = client.create_card(task['title'], incomplete_list, task['desc'])
+		if len(task['sub_tasks']) > 0:
+			checklist = client.create_checklist(card, 'Sub tasks')
+		for sub_task in task['sub_tasks']:
+			print '\t\t'+sub_task['title']
+			if sub_task['status'] == 'CHECKED':
+				checkitem = client.create_checkitem(checklist, sub_task['title'], 1)
+			else:
+				checkitem = client.create_checkitem(checklist, sub_task['title'], 0)
