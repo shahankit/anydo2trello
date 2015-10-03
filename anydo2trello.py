@@ -38,4 +38,7 @@ for key in task_dict:
 		task['sub_tasks'].append({'title':sub_task['title'], 'status':sub_task['status']})
 	category_data[task_dict[key]['categoryId']]['tasks'].append(task)
 
-print(category_data)
+f = open('anydo2trello.userinfo', 'a')
+api_key = f.readline().strip()
+if api_key == '':
+	api_key = raw_input('Get a new api key from here: https://trello.com/1/appKey/generate and paste only api key here: ')
