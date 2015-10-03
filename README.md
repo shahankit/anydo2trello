@@ -6,11 +6,8 @@ This script does the following to convert any.do data to trello
 |**AnyDo**|**Trello**|
 |---|---|
 |Categories|Boards|
-|---|---|
 |Tasks|Cards
-|---|---|
 |Notes|Description|
-|---|---|
 |Sub tasks|Checklist|
 
 By default all the **unchecked** tasks are added to **To Do** list of a board and **checked** tasks are added to **Done** list of a board. Feel free to change them as you wish to from the script.
