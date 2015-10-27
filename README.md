@@ -1,5 +1,5 @@
 # anydo2trello
-This script imports your tasks from [any.do](https://www.any.do) and converts them to boards and cards in [trello](https://www.trello.com). I particularly did this after the anydo 3.0 update which I didn't like so decided to shift all my notes to my trello account which I used for work purposes.
+This script imports your tasks from [any.do](https://www.any.do) and converts them to boards and cards in [trello](https://www.trello.com).
 
 This script does the following to convert any.do data to trello
 
